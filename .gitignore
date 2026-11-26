@@ -1,0 +1,24 @@
+# deps & build
+node_modules/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# foundry
+contracts/cache/
+contracts/out/
+contracts/broadcast/
+
+# env & secrets
+.env
+.env.*
+!.env.example
+
+# tooling
+.DS_Store
+.serena/
+.remember/
+.vercel/
+.playwright-mcp/

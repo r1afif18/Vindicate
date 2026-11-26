@@ -1,0 +1,340 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/*
+ * Vindicate "Vault" design system. Rationale and rules: web/DESIGN.md.
+ * Derived from the mark: a hexagonal shield cut at 30/60 degrees around an upward arrow,
+ * electric cyan on black. One dark theme.
+ */
+
+:root {
+  --background: #04080b;
+  --foreground: #e3f3f6;
+  /* Elevation: background < muted (shell) < card (plate) < accent (hover, chips). */
+  --muted: #081117;
+  --muted-foreground: #7d969e;
+  --card: #0b161d;
+  --card-foreground: #e3f3f6;
+  --popover: #0d1a22;
+  --popover-foreground: #e3f3f6;
+  --accent: #112530;
+  --accent-foreground: #e3f3f6;
+  /* Brand cyan, sampled from the mark. Main action, focus and the brand only. */
+  --primary: #12e7f5;
+  --primary-foreground: #021216;
+  --secondary: #d9eef2;
+  --secondary-foreground: #04080b;
+  --border: #172832;
+  --input: #22414e;
+  --ring: #12e7f5;
+  --grid: rgb(18 231 245 / 0.045);
+  --success: #45e39a;
+  --success-foreground: #03150c;
+  --destructive: #ff5a6e;
+  --destructive-foreground: #1d0408;
+  --warning: #ffb547;
+  --warning-foreground: #1f1402;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+@theme {
+  /* Modular scale, ratio 1.25 from 16px. Line height tightens as size grows. */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.5;
+  --text-base: 1rem;
+  --text-base--line-height: 1.6;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.45;
+  --text-xl: 1.5625rem;
+  --text-xl--line-height: 1.3;
+  --text-2xl: 1.953rem;
+  --text-2xl--line-height: 1.15;
+  --text-3xl: 2.441rem;
+  --text-3xl--line-height: 1.08;
+  --text-4xl: 3.052rem;
+  --text-4xl--line-height: 1.02;
+  --text-5xl: 3.815rem;
+  --text-5xl--line-height: 0.98;
+  --text-display: 5.96rem;
+  --text-display--line-height: 0.92;
+
+  --tracking-display: -0.025em;
+  --tracking-heading: -0.02em;
+
+  /* Corners are cut, not rounded. Radius exists only for dots and avatars. */
+  --radius-sm: 0.125rem;
+
+  --container-prose: 40rem;
+  --container-page: 76rem;
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  /* Landing page curtain: holds for the count, then lifts for good. */
+  --animate-preloader-out: preloader-out 700ms var(--ease-in-out-cubic) 1900ms forwards;
+  /* Hero text arriving once the curtain has lifted. */
+  --animate-rise: rise 900ms var(--ease-out-quart) 2100ms both;
+
+  @keyframes preloader-out {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  @keyframes shimmer {
+    from {
+      background-position: 200% 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+}
+
+/* Display face: Oxanium, squared and technical like the mark's cuts. */
+@utility font-display {
+  font-family: var(--font-oxanium), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  letter-spacing: var(--tracking-display);
+}
+
+/* Once the landing page's curtain has lifted, a return to the page does not wait for it again. */
+:root[data-entered="true"] .animate-rise {
+  animation-delay: 0ms;
+}
+
+/*
+ * Landing page headings ("Flow"): the body face, medium weight, set tight. The app and the mark
+ * keep Oxanium.
+ */
+@utility font-flow {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+}
+
+/* Registration marks on two opposite corners of a plate, echoing where the chamfers cut. */
+@utility corner-ticks {
+  position: relative;
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-color: var(--input);
+    border-style: solid;
+    border-width: 0;
+    pointer-events: none;
+  }
+  &::before {
+    top: -1px;
+    left: -1px;
+    border-top-width: 1px;
+    border-left-width: 1px;
+  }
+  &::after {
+    right: -1px;
+    bottom: -1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+  }
+}
+
+/*
+ * Chamfers: the mark's cuts applied to two opposite corners (top-left, bottom-right).
+ * Pair with a 1px padded wrapper in the border color to draw an outline that follows the cut.
+ */
+@utility chamfer-sm {
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+}
+@utility chamfer {
+  clip-path: polygon(
+    14px 0,
+    100% 0,
+    100% calc(100% - 14px),
+    calc(100% - 14px) 100%,
+    0 100%,
+    0 14px
+  );
+}
+@utility chamfer-lg {
+  clip-path: polygon(
+    28px 0,
+    100% 0,
+    100% calc(100% - 28px),
+    calc(100% - 28px) 100%,
+    0 100%,
+    0 28px
+  );
+}
+
+/* Isometric grid at the mark's 30/150-degree angles. Decorative only, very faint. */
+@utility bg-iso {
+  background-image:
+    repeating-linear-gradient(30deg, var(--grid) 0 1px, transparent 1px 56px),
+    repeating-linear-gradient(150deg, var(--grid) 0 1px, transparent 1px 56px);
+}
+
+/* Skeleton shimmer, drawn from surface tokens. */
+@utility bg-shimmer {
+  background-image: linear-gradient(90deg, var(--accent), var(--muted), var(--accent));
+  background-size: 200% 100%;
+}
+
+/* Hero lighting: a cyan spotlight from above and a horizon glow below the mark. */
+@utility bg-spotlight {
+  background-image: radial-gradient(
+    ellipse 55% 60% at 50% 0%,
+    rgb(18 231 245 / 0.14),
+    transparent 70%
+  );
+}
+@utility bg-horizon {
+  background-image: radial-gradient(
+    ellipse 50% 40% at 50% 80%,
+    rgb(18 231 245 / 0.24),
+    transparent 70%
+  );
+}
+/* Dot matrix that fades out from the centre. */
+@utility bg-dot-matrix {
+  background-image: radial-gradient(circle, rgb(18 231 245 / 0.28) 1px, transparent 1.6px);
+  background-size: 12px 12px;
+  mask-image: radial-gradient(ellipse 45% 55% at 50% 70%, black, transparent 75%);
+}
+/* Headline treatment: brightness rises toward the end of the line. */
+@utility text-fade {
+  background-image: linear-gradient(100deg, var(--muted-foreground) 0%, var(--foreground) 55%);
+  background-clip: text;
+  color: transparent;
+}
+
+/* Soft brand light, used once behind the hero mark. */
+@utility bg-glow {
+  background-image: radial-gradient(closest-side, rgb(18 231 245 / 0.16), transparent);
+}
+
+/*
+ * Tactile depth. Light comes from above: raised surfaces catch a highlight on their top edge,
+ * recessed ones (inputs, wells) carry a shadow on theirs. Pressed buttons lose their lift.
+ */
+@utility tactile-primary {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.55),
+    inset 0 -2px 0 rgb(2 18 22 / 0.35),
+    0 10px 30px -12px rgb(18 231 245 / 0.55);
+  &:active {
+    box-shadow:
+      inset 0 2px 4px rgb(2 18 22 / 0.35),
+      0 4px 14px -10px rgb(18 231 245 / 0.5);
+  }
+}
+@utility tactile-raised {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    0 1px 2px rgb(0 0 0 / 0.4);
+  &:active {
+    box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.5);
+  }
+}
+@utility tactile-recessed {
+  box-shadow:
+    inset 0 2px 6px rgb(0 0 0 / 0.45),
+    inset 0 -1px 0 rgb(255 255 255 / 0.03);
+}
+
+/* Motion durations. Short for feedback, longer only for orchestrated sequences. */
+@utility duration-instant {
+  transition-duration: 120ms;
+  animation-duration: 120ms;
+}
+@utility duration-quick {
+  transition-duration: 200ms;
+  animation-duration: 200ms;
+}
+@utility duration-base {
+  transition-duration: 320ms;
+  animation-duration: 320ms;
+}
+@utility duration-slow {
+  transition-duration: 600ms;
+  animation-duration: 600ms;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground;
+  }
+
+  ::selection {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      @apply scroll-auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 1ms !important;
+      animation-delay: 0ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 1ms !important;
+    }
+  }
+}

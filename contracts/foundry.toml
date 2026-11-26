@@ -1,0 +1,25 @@
+[profile.default]
+src = "src"
+test = "test"
+script = "script"
+out = "out"
+libs = ["lib"]
+solc_version = "0.8.30"
+evm_version = "prague"
+optimizer = true
+optimizer_runs = 10_000
+remappings = ["forge-std/=lib/forge-std/src/", "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/"]
+
+[profile.ci]
+fuzz = { runs = 2_000 }
+
+[fmt]
+line_length = 100
+
+[rpc_endpoints]
+bsc = "${BSC_RPC_URL}"
+bsc_testnet = "${BSC_TESTNET_RPC_URL}"
+
+[etherscan]
+bsc = { key = "${ETHERSCAN_API_KEY}", chain = 56 }
+bsc_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 97 }

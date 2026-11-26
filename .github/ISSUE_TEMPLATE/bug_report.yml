@@ -1,0 +1,14 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Security issue? Use private vulnerability reporting instead (see SECURITY.md). Never paste a private key."
+  - type: textarea
+    id: what
+    attributes: { label: What happened, description: Steps, expected and actual result }
+    validations: { required: true }
+  - type: input
+    id: network
+    attributes: { label: Network and transaction hash (if any) }
